@@ -1,0 +1,2 @@
+# ML Zoomcamp
+This repository is going to serve for Homework completion of the [MLZoomcamp course](https://github.com/DataTalksClub/machine-learning-zoomcamp) of 2025. The topics cover classical Machine Learning topics such as Linear Regression, Logistic Regression, Decision Trees and Esemble Learning, Metrics Evaluation, Model Deployment, Neural Netwoks and Deep Learning, Kubernetes and Tensorflow. 
