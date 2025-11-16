@@ -10,6 +10,30 @@ from typing import Dict, Any
 from typing import Literal, Union
 from pydantic import BaseModel, Field, conint, confloat
 
+#request body definition
+class Reproperty(BaseModel):
+    land_use_description_rank: Union[Literal[1, 2, 3, 4], Literal[1.0, 2.0, 3.0, 4.0]]
+    zipcode_4tier_rank: Union[Literal[1, 2, 3, 4], Literal[1.0, 2.0, 3.0, 4.0]]
+    overall_condition_rank: Union[Literal[1, 2, 3, 4, 5, 6], Literal[1.0, 2.0, 3.0, 4.0, 5.0, 6.0]]
+    heat_type_rank: Union[Literal[0, 1, 2, 3, 4, 5, 6], Literal[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0]]
+    total_num_rooms: conint(ge=0, le=20)
+    gross_area: confloat(ge=0)
+    adjusted_tax: confloat(ge=0)
+    bed_rms: Union[conint(ge=0), confloat(ge=0)]
+    full_bth: Union[conint(ge=0), confloat(ge=0)]
+    kitchens: Union[conint(ge=0), confloat(ge=0)]
+    num_parking: Union[conint(), confloat()]
+    floor_number: confloat()
+    building_age: confloat()
+    remodel_age: confloat()
+
+
+# response
+class PredictResponse(BaseModel):
+    predicted_value: float
+
+
+
 app = FastAPI(title = "property-prediction")
 
 with open('model.bin', 'rb') as f_in:
@@ -20,13 +44,13 @@ def predict_single(re_property):
     return result  
     
 @app.post("/predict")
-def predict(re_property: Dict[str, Any]):
-    result = predict_single(re_property)
+def predict(re_property: Reproperty) -> PredictResponse:
+    result = predict_single(re_property.dict())
     restored_value = np.exp(result) - 1
     prediction = round(float(restored_value.item()),2)
-    return {
-        "predicted_value": prediction
-        }
+    
+    return PredictResponse(
+        predicted_value=prediction)
     
 
 # used the 10th value from the test data
