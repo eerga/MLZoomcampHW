@@ -1,8 +1,4 @@
-import requests
-
-url = 'http://localhost:9696/predict'
-
-re_property = {
+{
     "land_use_description_rank": 2.0,
     "zipcode_4tier_rank": 3.0,
     "overall_condition_rank": 4.0,
@@ -18,8 +14,3 @@ re_property = {
     "building_age": 97.0,
     "remodel_age": 6.0
 }
-
-response = requests.post(url, json=re_property)
-
-prediction = response.json()
-print("price prediction is: ", prediction)

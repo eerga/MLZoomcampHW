@@ -7,6 +7,9 @@ from fastapi import FastAPI
 import numpy as np
 from typing import Dict, Any
 
+from typing import Literal, Union
+from pydantic import BaseModel, Field, conint, confloat
+
 app = FastAPI(title = "property-prediction")
 
 with open('model.bin', 'rb') as f_in:
@@ -14,22 +17,20 @@ with open('model.bin', 'rb') as f_in:
 
 def predict_single(re_property):
     result = pipeline.predict(re_property)
+    return result  
     
+@app.post("/predict")
+def predict(re_property: Dict[str, Any]):
+    result = predict_single(re_property)
     restored_value = np.exp(result) - 1
-    print("Predicted property value: ", round(float(restored_value.item()),2))
-    return round(float(restored_value.item()),2)
-
-app.post("/predict")
-def predict(customer: Dict[str, Any]):
-    prediction = predict_single(customer)
-
+    prediction = round(float(restored_value.item()),2)
     return {
         "predicted_value": prediction
-    }
-
+        }
+    
 
 # used the 10th value from the test data
-property_data = {
+re_property = {
     "land_use_description_rank": 2.00,
     "zipcode_4tier_rank": 3.00,
     "overall_condition_rank": 4.00,
