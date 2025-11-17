@@ -29,7 +29,12 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 <p>This project follows a systematic approach:</p>
 <ol>
 <li><strong>Data Preparation Phase</strong> (<code>data_prep.ipynb</code>): Comprehensive field analysis, feature selection, and data cleaning</li>
-<li><strong>Modeling Phase</strong>: EDA, Feature Engineering, and Model Training on the processed dataset</li>
+<li><strong>Feature Englineering and EDA Phase</strong> (<code>feature_eng_and_eda.ipynb</code>): EDA, Feature Engineering, and Further Data Cleaning.Model Training on the processed dataset</li>
+<li><strong>Modeling Phase</strong> (<code>modeling.ipynb</code>): Model Training on the processed dataset. Involves Selection of the Final Model</li>
+<li><strong>Final Model Training Phase</strong> (<code>train.ipynb</code>) and its script equivalent - (<code>train.py</code>): Final Model Training and Saving the Machine Pipeline to the `.bin`</li>
+<li><strong>Pydantic Schema</strong> (<code>pydantic_schema.ipynb</code>): Getting the information to formulate the Schema for Request and Response of the FastAPI application</li>
+<li><strong>Prediction Model Phase</strong> (<code>predict.ipynb</code>) and its script equivalent - (<code>predict.py</code>): Loading the model and Serving it via a web service (with Flask or specialized software - BentoML, KServe, etc)</li>
+
 </ol>
 <p>Only the most relevant features that align with our problem statement will be selected for the final modeling process.</p>
 <hr style="border: none; border-top: 1px solid #cc0000; margin: 10px 0;">
@@ -253,32 +258,113 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 </details>
 
 ## 🧹 Cleaned Data
+The cleaned data - [cleaned_property_data.csv](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/cleaned_property_data.csv) - contains 113931 records and 20 columns. Out of 20 columns, we have:
+
+**Target Variable**: **💰 total_value**: Total assessed value for property
+
+**Features:**
+`zip_code`: Zip code of parcel (string representation)
+`owner_occupied`: Residential Exemption: 1 indicates that the owner receives residential exemption as an owner‐occupied property
+`gross_area`: Gross floor area
+`bed_rms`: Total number of bedrooms‐Residential
+`full_bth`: Total number of full baths‐Residential
+`half_bth`: Total number of half baths‐Residential
+`kitchens`: Total number of kitchens‐Residential
+`total_num_rooms`: Total number of rooms‐Residential
+`fireplaces`: Total number of fireplaces
+`num_parking`: : Number of parking spaces
+
+**Engineered Features**
+`floor_number`: The max value between 
+- **RES_FLOOR**: Number of residential building stories
+- **CD_FLOOR**: Condominium unit floor number
+- Typically, whichever floor is max is the one that the residential unit is standing on. 
+
+`building_age`: 2025 - yr_built
+`remodel_age`: 2025 - `yr_remodel`. If `yr_remodel` field is missing, fill it in with `yr_built` and do the math. 
+`ac_type_rank` - derived from `ac_type` (Air Conditioning Type‐Residential) field. The following mapping is used to convert string to numeric representation: 
+```python
+ac_mapping = {
+    'n_none': 0,
+    'c_central_ac': 1,
+    'd_ductless_ac': 2, 
+}
+```
+
+`overall_condition_rank` - derived from `overall_cond` (Overall condition of parcel). The following mapping is used to convert string to numeric representation: 
+```python
+condition_ranking = {
+    'p_poor': 1,          # Worst
+    'f_fair': 2,          
+    'a_average': 3,       # Middle
+    'g_good': 4,          
+    'vg_very_good': 5,    
+    'e_excellent': 6,     # Best
+    'ex_excellent': 6     # Same as 'E - Excellent' (duplicate)
+}
+```
+`heat_type_rank` - derived from `heat_type` (Heating type). The following mapping is used to convert string to numeric representation: 
+```python
+heat_type_ranking = {
+    'n_none': 0,              # Worst - no heating system
+    'o_other': 1,             # Unknown quality
+    's_space_heat': 2,        # Poor - inefficient, uneven heating
+    'e_electric': 3,          # Expensive to operate, but reliable
+    'p_heat_pump': 4,         # Energy efficient, modern
+    'f_forced_hot_air': 5,    # Common, efficient, good distribution
+    'w_ht_water/steam': 6     # Best - even heat, comfortable, efficient
+}
+```
+`land_use_description_rank`- derived from `land_use_description` (Heating type). The following mapping is used to convert string to numeric representation: 
+```python
+property_type_ranking = {
+    'residential_condo': 1,
+    'single_fam_dwelling': 2, 
+    'two_fam_dwelling': 3, 
+    'three_fam_dwelling': 4,     
+}
+```
+based on the average price by each type of land use description
+
+`zipcode_4tier_rank`- derived from 2 items - `zip_code` and `zipcode_4tier` (Classifying zip codes into 4 tiers based on price - the lower, the avg price, the lower the tier and inventory - the higher the inventory, the lower the tier.)
+```python
+zipcode_mapping = {
+    'budget': 1,
+    'mid_market': 2,
+    'high_end': 3,
+    'premium': 4
+}
+```
+`adjusted_tax`: if owner_occupied == 1, then we substract $3984.21 from the gross tax.
 
 ## 📊 EDA
+![Distribution Analysis](images/total_price_distrib.png)
+Distribution of the target variable to see if the models would perform well. Since we are focusing the first-time homebuyers, we capped the price at $1.5 million dollars. 
+
+<br>
+
+![Price Analysis](images/4_tier_class.png)
+Indicates the quadrant where the inventory count is high and the median price is relatively low so that there is less of competition for the house / condominium. 
+
+![Correlation Matrix](images/property_value_dist.png)  
+I tried to divide the properties by zipcode and bin the list of the zip codes into a category. However, it is possible to see that the outliers in 3 categories - `high_end`, `mid_market`, and `budget` are way too high, making it quite hard to determine which house belongs to which category. After some time, I've realized that we should have incorporated the overall condition as well in the average prices by zipcodes statistics, but that was enough of feature engieering for the night. 
 
 ## 🤖 Model training
+![Feature Imporance](images/feature_importance.png)
+Indicates that adjusted tax was the most influential predictive features for tree models. The same variables was the most influential for linear models.
+
+![Model Comparision](images/model_comparison.png)
+Shows breakdown of the train RMSE and validation RMSE. The reason why they are so small is because I did a logarithmic transformation on the target value (`total_value`) because it was so much higher compared to the rest of the features. 
+
+The way that the model was chosen is basically to where the difference between the train and validation RSME's was small enough. The most frequent was 0.002 difference, so I went with one of those models. 
+
+Again, this project is not focused on having the absolute best model. We are doing everything we can. 
+
+![Best Model](images/best_model.png)
+`ElasticNet` was the model of my selection with the listed parameters. 
+
 
 ## Python scripts for data pre-processing and training
-
-## UV setup
-From your root directory, run `pip install uv`
-
-Clone the repo
-
-In the repo directory, run:
-
-`uv init`
-`rm main.py`
-
-Install dependencies
-`uv add scikit-learn==1.1.0 numpy==1.26.1 fastapi uvicorn`
-
-Install dev dependencies
-`uv add --dev requests`
-
-## Run the code from the UV environment
-
-`uv run uvicorn predict:app --host 0.0.0.0 --port 9696 --reload`
 
 ## Putting Everything to Docker
 
@@ -286,15 +372,17 @@ Make sure you have docker installed - you probably already do since you are taki
 
 ### Local run option:
 
+`git clone https://github.com/eerga/MLZoomcampHW.git`
+
 To double check, run 
 
 `docker run hello-world`
 
 If it was ran successfully, then let's take a look at the file running commands:
 
-``
+```
 docker build --no-cache -t real-estate-prediction .
-``
+```
 
 ```
 docker run -it --rm -p 9696:9696 real_estate_price_prediction
@@ -315,62 +403,93 @@ Expected reponse:
 }
 ```
 
-### Cloud deployment - video proof (No need to run the code)
+### Cloud deployment - [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) (No need to run the code)
 
-execute: 
+<div align="center">
 
-```sh
+[![Boston Real Estate API - Cloud Deployment Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=-sTecFyrV18)
+
+**🎬 Complete Fly.io Deployment Walkthrough**  
+*Boston Real Estate Price Prediction API → Cloud*
+
+
+</div>
+
+---
+### ☁️ Cloud Deployment - Fly.io Setup
+
+> [!NOTE]
+> **Video Proof Available**: This deployment was successfully completed and documented. No need to run these commands yourself! Click on the Gray YouTube Image or on [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) to see the deployment video.
+
+🚀 **Step 1: Install Fly.io CLI**
+
+```bash
+# Download and install Fly.io CLI
 curl -L https://fly.io/install.sh | sh
 ```
 
+⚙️ **Step 2: Edit shell configuration (works for Mac)**
+
+Open the bash shell
 ```sh
 nano ~/.zshrc
 ```
-
-export variables 
+Export environment variables 
 ```sh
-export FLYCTL_INSTALL="/Users/I556249/.fly"
+export FLYCTL_INSTALL="{directory}/.fly"
 export PATH="$FLYCTL_INSTALL/bin:$PATH"
 ```
-
-Reload the shell:
+Reload the shell to update its status:
 
 ```sh
 `source ~/.zshrc
 ```
-Check everything works ok by checking the fly version
+✅ **Step 3: Verify Installation**
 ```sh
 which fly
 ```
 
-Authenticate to fly.io:
-```fly auth signup```
+🔐 **Step 4: Authentication & Setup**
+```sh
+# Sign up and authenticate with Fly.io
+fly auth signup
+```
 
-```fly launch --generate-name```
+```sh
+# Launch your app with auto-generated name
+fly launch --generate-name
+```
 
-Answers to questions:
-N - no, I don't want to tweak the settings
-Y- yes, Create a Docker file
+**[!TIP] Interactive Setup Questions**:
+❌ N - No, I don't want to tweak the settings
+✅ Y - Yes, create a Dockerfile
 
+🚀 **Step 5: Deploy Your Application**
 Check that Docker ignore was created
 
 ```fly deploy```
 
-Get the name of the deployment link
+🎯 **Step 6: Test Your Deployment**
+1. 📋 Get your deployment URL from the fly deploy output
+2. 🌐 Navigate to [your-app-url]/docs
+3. 🧪 Click "Try it out" in the FastAPI documentation
+4. 📄 Copy-paste your re_property.json test data
+5. 🎉 Expected Response:
+```python
+{
+  "predicted_value": 807383.14
+}
+```
+🧪 **Step 7: Test with Custom Script**
+```python
+# Update marketing.py with your deployment URL
+python marketing.py
+```
 
-Navigate to [deployment link]/docs
-
-Try it out!
-
-Change the marketing.py script to the URL that was created
-
-Run python marketing.py
-
-Destroy the app
-
-Get the list of apps
+🧹 **Step 8: Clean Up (Optional)**
 
 ```sh
+# List all your fly apps
 fly apps list
 ```
 
