@@ -268,7 +268,7 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 
 **Target Variable**: **💰 total_value**: Total assessed value for property
 
-**Features:**
+**Features:** <br>
 `zip_code`: Zip code of parcel (string representation)
 `owner_occupied`: Residential Exemption: 1 indicates that the owner receives residential exemption as an owner‐occupied property
 `gross_area`: Gross floor area
@@ -280,7 +280,7 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 `fireplaces`: Total number of fireplaces
 `num_parking`: : Number of parking spaces
 
-**Engineered Features**
+**Engineered Features** <br>
 `floor_number`: The max value between 
 - **RES_FLOOR**: Number of residential building stories
 - **CD_FLOOR**: Condominium unit floor number
@@ -377,7 +377,7 @@ Again, this project is not focused on having the absolute best model. We are doi
 ### 🐳 Local Docker Deployment
 
 > [!NOTE]
-> **Video Demonstration Available**: Complete walkthrough of local Docker deployment and testing. Click [here to watch the video demonstration](https://studio.youtube.com/video/Uaqv5nxVsjs) or follow the step-by-step instructions below.
+> **Video Demonstration Available**: Complete walkthrough of local Docker deployment and testing. Click [here to watch the video demonstration](youtube.com/watch?v=Uaqv5nxVsjs&feature=youtu.be) or follow the step-by-step instructions below.
 
 > [!TIP]
 > **Prerequisites**: Ensure Docker is installed and running on your machine
