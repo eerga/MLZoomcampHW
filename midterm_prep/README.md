@@ -395,7 +395,8 @@ cd MLZoomcampHW/midterm_prep
 
 ✅ **Step 2: Verify Docker Installation**
 
-> [!NOTE] If the above command runs successfully, you're ready to proceed!
+> [!NOTE] 
+> If the above command runs successfully, you're ready to proceed!
 
 ```sh
 docker run hello-world
@@ -486,7 +487,7 @@ fly launch --generate-name
 ```
 
 >[!TIP] 
-> Interactive Setup Questions**:
+> **Interactive Setup Questions**:
 > ❌ N - No, I don't want to tweak the settings
 > ✅ Y - Yes, create a Dockerfile
 
