@@ -39,7 +39,7 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 > 7. **Dependency Files:** [pyproject.toml](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/pyproject.toml)
 > 8. **Packaging the Code:** [Dockerfile](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/Dockerfile) for running the service
 > 9. **Local Docker Deployment**: See [🐳 Local Docker Deployment](#-local-docker-deployment) section below for local testing instructions
-> 10. **Deployment**: See [☁️ Cloud Deployment](#cloud-deployment---video-proof) section with [video demonstration](https://www.youtube.com/watch?v=-sTecFyrV18)
+> 10. **Deployment**: See [☁️ Cloud Deployment](#️-cloud-deployment) section with [video demonstration](https://www.youtube.com/watch?v=-sTecFyrV18)
 > 
 > Only the most relevant features that align with our problem statement will be selected for the final modeling process.
 > 
@@ -47,15 +47,9 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 > 
 > **🔍 For the Detail-Oriented:** If you're curious about the nitty-gritty details of the data cleaning and preparation process, dive into [data_prep.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/data_prep.ipynb) for a comprehensive walkthrough.
 
-</ol>
-<p>Only the most relevant features that align with our problem statement will be selected for the final modeling process.</p>
-<hr style="border: none; border-top: 1px solid #cc0000; margin: 10px 0;">
-<p><strong>🔍 For the Detail-Oriented:</strong> If you're curious about the nitty-gritty details of the data cleaning and preparation process, dive into <code>data_prep.ipynb</code> for a comprehensive walkthrough.</p>
-</div>
-
 **Target Variable**: **💰 TOTAL_VALUE**: Total assessed value for property
 
-**Features** <details>
+**Features:** <details>
 <summary><strong>📋 Full Dataset Field Descriptions</strong> (Click to expand)</summary>
 <br>
 
@@ -445,20 +439,9 @@ docker rmi real-estate-prediction
 
 >[!WARNING] Port Conflicts: If port 9696 is already in use, try: docker run -it --rm -p 9697:9696 real-estate-prediction and access via http://localhost:9697
 
-### Cloud deployment - [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) (No need to run the code)
-
-<div align="center">
-
-[![Boston Real Estate API - Cloud Deployment Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=-sTecFyrV18)
-
-**🎬 Complete Fly.io Deployment Walkthrough**  
-*Boston Real Estate Price Prediction API → Cloud*
-
-
-</div>
-
----
-### ☁️ Cloud Deployment - Fly.io Setup
+### ☁️ Cloud deployment
+#### [Video Proof](https://www.youtube.com/watch?v=-sTecFyrV18) 
+There is no need to run the code because I deleted the app, but feel free to follow the commands as I talk in the video.
 
 > [!NOTE]
 > **Video Proof Available**: This deployment was successfully completed and documented. No need to run these commands yourself! Click on the Gray YouTube Image or on [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) to see the deployment video.
