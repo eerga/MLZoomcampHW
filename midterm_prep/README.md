@@ -520,7 +520,7 @@ python marketing.py
 fly apps list
 ```
 
-Detroy the app
+Destroy the app
 ```sh
 fly apps destroy <app-name>
 ```
