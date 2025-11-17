@@ -394,6 +394,7 @@ cd MLZoomcampHW/midterm_prep
 ```
 
 ✅ **Step 2: Verify Docker Installation**
+
 > [!NOTE] If the above command runs successfully, you're ready to proceed!
 
 ```sh
@@ -484,9 +485,10 @@ fly auth signup
 fly launch --generate-name
 ```
 
-**[!TIP] Interactive Setup Questions**:
-❌ N - No, I don't want to tweak the settings
-✅ Y - Yes, create a Dockerfile
+>[!TIP] 
+> Interactive Setup Questions**:
+> ❌ N - No, I don't want to tweak the settings
+> ✅ Y - Yes, create a Dockerfile
 
 🚀 **Step 5: Deploy Your Application**
 Check that Docker ignore was created
