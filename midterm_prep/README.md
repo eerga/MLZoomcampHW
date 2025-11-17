@@ -387,7 +387,7 @@ Clone the repository
 git clone https://github.com/eerga/MLZoomcampHW.git
 
 # Navigate to project directory
-cd midterm_prep
+cd MLZoomcampHW/midterm_prep
 ```
 
 ✅ **Step 2: Verify Docker Installation**
@@ -440,11 +440,9 @@ docker rmi real-estate-prediction
 >[!WARNING] Port Conflicts: If port 9696 is already in use, try: docker run -it --rm -p 9697:9696 real-estate-prediction and access via http://localhost:9697
 
 ### ☁️ Cloud deployment
-#### [Video Proof](https://www.youtube.com/watch?v=-sTecFyrV18) 
-There is no need to run the code because I deleted the app, but feel free to follow the commands as I talk in the video.
 
 > [!NOTE]
-> **Video Proof Available**: This deployment was successfully completed and documented. No need to run these commands yourself! Click on the Gray YouTube Image or on [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) to see the deployment video.
+> **Video Proof Available**: This deployment was successfully completed and documented. No need to run these commands yourself! Click on the [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) to see the deployment video.
 
 🚀 **Step 1: Install Fly.io CLI**
 
