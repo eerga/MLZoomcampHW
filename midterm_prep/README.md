@@ -260,4 +260,121 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 
 ## Python scripts for data pre-processing and training
 
-## Instructions on how to run the project
+## UV setup
+From your root directory, run `pip install uv`
+
+Clone the repo
+
+In the repo directory, run:
+
+`uv init`
+`rm main.py`
+
+Install dependencies
+`uv add scikit-learn==1.1.0 numpy==1.26.1 fastapi uvicorn`
+
+Install dev dependencies
+`uv add --dev requests`
+
+## Run the code from the UV environment
+
+`uv run uvicorn predict:app --host 0.0.0.0 --port 9696 --reload`
+
+## Putting Everything to Docker
+
+Make sure you have docker installed - you probably already do since you are taking this course
+
+### Local run option:
+
+To double check, run 
+
+`docker run hello-world`
+
+If it was ran successfully, then let's take a look at the file running commands:
+
+``
+docker build --no-cache -t real-estate-prediction .
+``
+
+```
+docker run -it --rm -p 9696:9696 real_estate_price_prediction
+```
+
+Don't forget to stop the containers after you are done testing locally
+```
+docker stop $(docker ps -q)
+```
+Navigate to `http://0.0.0.0:9696/docs` and click on `Try it out`.
+Copy-paste re_property.json file.
+
+Expected reponse:
+
+```python
+{
+  "predicted_value": 807383.14
+}
+```
+
+### Cloud deployment - video proof (No need to run the code)
+
+execute: 
+
+```sh
+curl -L https://fly.io/install.sh | sh
+```
+
+```sh
+nano ~/.zshrc
+```
+
+export variables 
+```sh
+export FLYCTL_INSTALL="/Users/I556249/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
+```
+
+Reload the shell:
+
+```sh
+`source ~/.zshrc
+```
+Check everything works ok by checking the fly version
+```sh
+which fly
+```
+
+Authenticate to fly.io:
+```fly auth signup```
+
+```fly launch --generate-name```
+
+Answers to questions:
+N - no, I don't want to tweak the settings
+Y- yes, Create a Docker file
+
+Check that Docker ignore was created
+
+```fly deploy```
+
+Get the name of the deployment link
+
+Navigate to [deployment link]/docs
+
+Try it out!
+
+Change the marketing.py script to the URL that was created
+
+Run python marketing.py
+
+Destroy the app
+
+Get the list of apps
+
+```sh
+fly apps list
+```
+
+Detroy the app
+```sh
+fly apps destroy <app-name>
+```

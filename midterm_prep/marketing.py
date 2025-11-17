@@ -1,6 +1,7 @@
 import requests
 
 url = 'http://localhost:9696/predict'
+#url = 'https://still-brook-1880.fly.dev/predict'
 
 re_property = {
     "land_use_description_rank": 2.0,
