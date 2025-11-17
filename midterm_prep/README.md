@@ -430,9 +430,6 @@ python marketing.py
 🧹 **Step 6: Clean Up**
 
 ```sh
-# Stop all running containers when finished
-docker stop $(docker ps -q)
-
 # Optional: Remove the image to free up space
 docker rmi real-estate-prediction
 ```
