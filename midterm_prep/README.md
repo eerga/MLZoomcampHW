@@ -23,17 +23,29 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 
 ## 🗄️ Initial Dataset
 
-<div style="background-color: #ffe6e6; border: 2px solid #ff4444; border-radius: 8px; padding: 15px; margin: 10px 0;">
-<h4 style="color: #cc0000; margin-top: 0;">🚨 Data Processing Disclaimer</h4>
-<p><strong>The initial 66-column and 183445-record dataset shown below is NOT used directly for modeling.</strong></p>
-<p>This project follows a systematic approach:</p>
-<ol>
-<li><strong>Data Preparation Phase</strong> (<code>data_prep.ipynb</code>): Comprehensive field analysis, feature selection, and data cleaning</li>
-<li><strong>Feature Englineering and EDA Phase</strong> (<code>feature_eng_and_eda.ipynb</code>): EDA, Feature Engineering, and Further Data Cleaning.Model Training on the processed dataset</li>
-<li><strong>Modeling Phase</strong> (<code>modeling.ipynb</code>): Model Training on the processed dataset. Involves Selection of the Final Model</li>
-<li><strong>Final Model Training Phase</strong> (<code>train.ipynb</code>) and its script equivalent - (<code>train.py</code>): Final Model Training and Saving the Machine Pipeline to the `.bin`</li>
-<li><strong>Pydantic Schema</strong> (<code>pydantic_schema.ipynb</code>): Getting the information to formulate the Schema for Request and Response of the FastAPI application</li>
-<li><strong>Prediction Model Phase</strong> (<code>predict.ipynb</code>) and its script equivalent - (<code>predict.py</code>): Loading the model and Serving it via a web service (with Flask or specialized software - BentoML, KServe, etc)</li>
+> [!CAUTION]
+> **🚨 Data Processing Disclaimer**
+> 
+> **The initial 66-column and 183445-record dataset shown below is NOT used directly for modeling.**
+> 
+> This project follows a systematic approach:
+> 
+> 1. **Data Preparation Phase:** ([data_prep.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/data_prep.ipynb)): Comprehensive field analysis, feature selection, and data cleaning
+> 2. **Feature Engineering and EDA Phase:** ([feature_eng_and_eda.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/feature_eng_and_eda.ipynb)): EDA, Feature Engineering, and Further Data Cleaning
+> 3. **Modeling Phase:** ([modeling.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/modeling.ipynb)): Model Training on the processed dataset. Involves Selection of the Final Model
+> 4. **Final Model Training Phase:** ([train.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/train.ipynb)) and its script equivalent - ([train.py](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/train.py)): Final Model Training and Saving the [Machine Learning Pipeline](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/model.bin) to the `.bin`
+> 5. **Pydantic Schema:** ([pydantic_schema.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/pydantic_schema.ipynb)): Getting the information to formulate the Schema for Request and Response of the FastAPI application
+> 6. **Prediction Model Phase:** ([predict.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/predict.ipynb)) and its script equivalent - ([predict.py](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/predict.py)): Loading the model and Serving it via a web service
+> 7. **Dependency Files:** [pyproject.toml](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/pyproject.toml)
+> 8. **Packaging the Code:** [Dockerfile](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/Dockerfile) for running the service
+> 9. **Local Docker Deployment**: See [🐳 Local Docker Deployment](#-local-docker-deployment) section below for local testing instructions
+> 10. **Deployment**: See [☁️ Cloud Deployment](#cloud-deployment---video-proof) section with [video demonstration](https://www.youtube.com/watch?v=-sTecFyrV18)
+> 
+> Only the most relevant features that align with our problem statement will be selected for the final modeling process.
+> 
+> --------
+> 
+> **🔍 For the Detail-Oriented:** If you're curious about the nitty-gritty details of the data cleaning and preparation process, dive into [data_prep.ipynb](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/data_prep.ipynb) for a comprehensive walkthrough.
 
 </ol>
 <p>Only the most relevant features that align with our problem statement will be selected for the final modeling process.</p>
@@ -258,7 +270,7 @@ The ultimate goal is to build a predictive model that can accurately estimate pr
 </details>
 
 ## 🧹 Cleaned Data
-The cleaned data - [cleaned_property_data.csv](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/cleaned_property_data.csv) - contains 113931 records and 20 columns. Out of 20 columns, we have:
+**The cleaned data** - [cleaned_property_data.csv](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/cleaned_property_data.csv) - contains 113931 records and 20 columns and is **used for modeling**. Out of 20 columns, we have:
 
 **Target Variable**: **💰 total_value**: Total assessed value for property
 
@@ -339,21 +351,26 @@ zipcode_mapping = {
 
 ## 📊 EDA
 ![Distribution Analysis](images/total_price_distrib.png)
+
 Distribution of the target variable to see if the models would perform well. Since we are focusing the first-time homebuyers, we capped the price at $1.5 million dollars. 
 
 <br>
 
 ![Price Analysis](images/4_tier_class.png)
+
 Indicates the quadrant where the inventory count is high and the median price is relatively low so that there is less of competition for the house / condominium. 
 
 ![Correlation Matrix](images/property_value_dist.png)  
+
 I tried to divide the properties by zipcode and bin the list of the zip codes into a category. However, it is possible to see that the outliers in 3 categories - `high_end`, `mid_market`, and `budget` are way too high, making it quite hard to determine which house belongs to which category. After some time, I've realized that we should have incorporated the overall condition as well in the average prices by zipcodes statistics, but that was enough of feature engieering for the night. 
 
 ## 🤖 Model training
 ![Feature Imporance](images/feature_importance.png)
+
 Indicates that adjusted tax was the most influential predictive features for tree models. The same variables was the most influential for linear models.
 
 ![Model Comparision](images/model_comparison.png)
+
 Shows breakdown of the train RMSE and validation RMSE. The reason why they are so small is because I did a logarithmic transformation on the target value (`total_value`) because it was so much higher compared to the rest of the features. 
 
 The way that the model was chosen is basically to where the difference between the train and validation RSME's was small enough. The most frequent was 0.002 difference, so I went with one of those models. 
@@ -363,38 +380,46 @@ Again, this project is not focused on having the absolute best model. We are doi
 ![Best Model](images/best_model.png)
 `ElasticNet` was the model of my selection with the listed parameters. 
 
+### 🐳 Local Docker Deployment
 
-## Python scripts for data pre-processing and training
+> [TIP]
+> **Prerequisites**: Ensure Docker is installed and running on your machine
 
-## Putting Everything to Docker
+📥 **Step 1: Get the Code**
 
-Make sure you have docker installed - you probably already do since you are taking this course
+Clone the repository
+```bash
+# Clone the repository
+git clone https://github.com/eerga/MLZoomcampHW.git
 
-### Local run option:
-
-`git clone https://github.com/eerga/MLZoomcampHW.git`
-
-To double check, run 
-
-`docker run hello-world`
-
-If it was ran successfully, then let's take a look at the file running commands:
-
+# Navigate to project directory
+cd midterm_prep
 ```
+
+✅ **Step 2: Verify Docker Installation**
+> [!NOTE] If the above command runs successfully, you're ready to proceed!
+
+```sh
+docker run hello-world
+```
+
+🔨 **Step 3: Build the Docker Image**
+```sh
+# Build the prediction API image
 docker build --no-cache -t real-estate-prediction .
 ```
 
-```
-docker run -it --rm -p 9696:9696 real_estate_price_prediction
+🚀 **Step 4: Run the Container**
+```sh
+# Start the API server
+docker run -it --rm -p 9696:9696 real-estate-prediction
 ```
 
-Don't forget to stop the containers after you are done testing locally
-```
-docker stop $(docker ps -q)
-```
-Navigate to `http://0.0.0.0:9696/docs` and click on `Try it out`.
-Copy-paste re_property.json file.
-
+🧪 Step 5: Test Your API
+🌐 Open your browser and navigate to: http://localhost:9696/docs
+📄 Click "Try it out" in the FastAPI documentation interface
+📋 Copy and paste the content from [re_property.json](https://github.com/eerga/MLZoomcampHW/blob/main/midterm_prep/re_property.json)
+▶️ Click "Execute" to get your prediction
 Expected reponse:
 
 ```python
@@ -402,6 +427,23 @@ Expected reponse:
   "predicted_value": 807383.14
 }
 ```
+
+**Option B: Automated Testing Script**
+
+```python 
+python marketing.py
+```
+🧹 **Step 6: Clean Up**
+
+```sh
+# Stop all running containers when finished
+docker stop $(docker ps -q)
+
+# Optional: Remove the image to free up space
+docker rmi real-estate-prediction
+```
+
+>[!WARNING] Port Conflicts: If port 9696 is already in use, try: docker run -it --rm -p 9697:9696 real-estate-prediction and access via http://localhost:9697
 
 ### Cloud deployment - [video proof](https://www.youtube.com/watch?v=-sTecFyrV18) (No need to run the code)
 
