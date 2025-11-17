@@ -356,7 +356,7 @@ Indicates the quadrant where the inventory count is high and the median price is
 
 ![Correlation Matrix](images/property_value_dist.png)  
 
-I tried to divide the properties by zipcode and bin the list of the zip codes into a category. However, it is possible to see that the outliers in 3 categories - `high_end`, `mid_market`, and `budget` are way too high, making it quite hard to determine which house belongs to which category. After some time, I've realized that we should have incorporated the overall condition as well in the average prices by zipcodes statistics, but that was enough of feature engieering for the night. 
+I tried to divide the properties by zipcode and bin the list of the zip codes into a category. However, it is possible to see that the outliers in 4 categories - `premium`, `high_end`, `mid_market`, and `budget` are way too high, making it quite hard to determine which house belongs to which category. After some time, I've realized that we should have incorporated the overall condition as well in the average prices by zipcodes statistics, but that was enough of feature engieering for the night. 
 
 ## 🤖 Model training
 ![Feature Imporance](images/feature_importance.png)
