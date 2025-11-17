@@ -376,7 +376,10 @@ Again, this project is not focused on having the absolute best model. We are doi
 
 ### 🐳 Local Docker Deployment
 
-> [TIP]
+> [!NOTE]
+> **Video Demonstration Available**: Complete walkthrough of local Docker deployment and testing. Click [here to watch the video demonstration](https://studio.youtube.com/video/Uaqv5nxVsjs) or follow the step-by-step instructions below.
+
+> [!TIP]
 > **Prerequisites**: Ensure Docker is installed and running on your machine
 
 📥 **Step 1: Get the Code**
