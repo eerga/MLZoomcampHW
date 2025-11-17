@@ -425,6 +425,7 @@ Expected reponse:
 **Option B: Automated Testing Script**
 
 ```python 
+cd MLZoomcampHW/midterm_prep
 python marketing.py
 ```
 🧹 **Step 6: Clean Up**
