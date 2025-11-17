@@ -395,12 +395,12 @@ cd MLZoomcampHW/midterm_prep
 
 ✅ **Step 2: Verify Docker Installation**
 
-> [!NOTE] 
-> If the above command runs successfully, you're ready to proceed!
-
 ```sh
 docker run hello-world
 ```
+
+> [!NOTE] 
+> If the above command runs successfully, you're ready to proceed!
 
 🔨 **Step 3: Build the Docker Image**
 ```sh
